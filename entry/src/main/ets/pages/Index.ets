@@ -1,74 +1,90 @@
-import { PermissionManager } from '../common/PermissionManager'
-import { Permissions } from '@kit.AbilityKit'
-import SpeechRecognizerManager from '../common/SpeechRecognizerManager'
+import { BaiduNLPService } from '../common/aitest'
 
 @Entry
 @Component
 struct Index {
   @State
-  text: string = ""
-  // 1 申请权限
-  fn1 = async () => {
-    // 准备好需要申请的权限 麦克风权限
-    const permissions: Permissions[] = ["ohos.permission.MICROPHONE"]
-    // 检查是否拥有权限
-    const isPermission = await PermissionManager.checkPermission(permissions)
-    if (!isPermission) {
-      //   如果没权限，就主动申请
-      await PermissionManager.requestPermission(permissions)
+  newsTitle: string = ""
+  @State
+  newsContent: string = ""
+  @State
+  summaryResult: string = ""
+  @State
+  summaryLoading: boolean = false
+
+  // 生成新闻摘要
+  generateSummary = async () => {
+    if (!this.newsTitle || !this.newsContent) {
+      this.summaryResult = "请输入新闻标题和内容";
+      return;
     }
-  }
-  // 2 实时语音识别
-  fn2 = () => {
-    SpeechRecognizerManager.init(res => {
-      console.log("实时语音识别", JSON.stringify(res))
-      this.text = res.result
-    })
-  }
-
-  // Check if the system supports speech recognition
-  checkSpeechRecognitionCapability = () => {
-    if (canIUse("SystemCapability.AI.SpeechRecognizer")) {
-      console.info("具备语音识别功能")
-    } else {
-      console.info("不具备语音识别功能")
+    
+    this.summaryLoading = true;
+    this.summaryResult = "";
+    
+    try {
+      const summary = await BaiduNLPService.generateSummary(this.newsTitle, this.newsContent);
+      this.summaryResult = summary;
+    } catch (error) {
+      this.summaryResult = "生成摘要失败：" + error;
+    } finally {
+      this.summaryLoading = false;
     }
-  }
-
-  // Check if the system supports image insertion
-  checkImageInsertionCapability = () => {
-    if (canIUse("SystemCapability.Multimedia.Image")) {
-      console.info("具备图片插入功能")
-    } else {
-      console.info("不具备图片插入功能")
-    }
-  }
-
-  constructor() {
-    super()
-    this.checkSpeechRecognitionCapability()
-  }
-
-  onInit() {
-    // Ensure it's also called here for redundancy
-    this.checkSpeechRecognitionCapability()
   }
 
   build() {
-    Column({ space: 10 }) {
-      Text(this.text)
+    Column() {
+      Scroll() {
+        Column({ space: 10 }) {
+          TextInput({ placeholder: '请输入新闻标题', text: this.newsTitle })
+            .onChange((value: string) => {
+              this.newsTitle = value
+            })
+            .width('100%')
+            .height(40)
+            .margin({ top: 10 })
 
-      Button("申请权限")
-        .onClick(this.fn1)
-      Button("实时语音识别")
-        .onClick(this.fn2)
-      Button("检查语音识别功能")
-        .onClick(this.checkSpeechRecognitionCapability)
-      Button("检查图片插入功能")
-        .onClick(this.checkImageInsertionCapability)
+          TextArea({ placeholder: '请输入新闻内容', text: this.newsContent })
+            .onChange((value: string) => {
+              this.newsContent = value
+            })
+            .width('100%')
+            .height(200)
+            .margin({ top: 10 })
+
+          Button(this.summaryLoading ? '正在生成摘要...' : '生成摘要')
+            .onClick(() => {
+              if (!this.summaryLoading) {
+                this.generateSummary()
+              }
+            })
+            .margin({ top: 10 })
+        }
+        .width('100%')
+        .padding(16)
+      }
+      .scrollBar(BarState.Auto)
+      .scrollable(ScrollDirection.Vertical)
+      .width('100%')
+      .layoutWeight(1)
+
+      if (this.summaryResult) {
+        Column() {
+          Divider()
+          Text('摘要结果：')
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .margin({ top: 10 })
+          Text(this.summaryResult)
+            .width('100%')
+            .margin({ top: 5, bottom: 10 })
+        }
+        .width('100%')
+        .padding(16)
+        .backgroundColor('#F5F5F5')
+      }
     }
-    .width("100%")
-    .height("100%")
-    .justifyContent(FlexAlign.Center)
+    .width('100%')
+    .height('100%')
   }
 }

@@ -1,8 +1,76 @@
 {
   "color": [
     {
-      "name": "start_window_background",
+      "name": "ohos_id_color_text_primary",
+      "value": "#182431"
+    },
+    {
+      "name": "ohos_id_color_text_primary_dark",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "ohos_id_color_text_secondary",
+      "value": "#18243180"
+    },
+    {
+      "name": "ohos_id_color_text_secondary_dark",
+      "value": "#FFFFFF80"
+    },
+    {
+      "name": "ohos_id_color_background_primary",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "ohos_id_color_background_primary_dark",
+      "value": "#1A1A1A"
+    },
+    {
+      "name": "ohos_id_color_background_secondary",
+      "value": "#F5F5F5"
+    },
+    {
+      "name": "ohos_id_color_background_secondary_dark",
+      "value": "#2A2A2A"
+    },
+    {
+      "name": "ohos_id_color_background_base",
+      "value": "#F5F5F5"
+    },
+    {
+      "name": "ohos_id_color_background_base_dark",
+      "value": "#000000"
+    },
+    {
+      "name": "ohos_id_color_divider",
+      "value": "#00000010"
+    },
+    {
+      "name": "ohos_id_color_divider_dark",
+      "value": "#FFFFFF20"
+    },
+    {
+      "name": "ohos_id_color_shadow",
+      "value": "#0000000A"
+    },
+    {
+      "name": "ohos_id_color_shadow_dark",
+      "value": "#00000040"
+    },
+    {
+      "name": "ohos_id_color_accent",
+      "value": "#007DFF"
+    },
+    {
+      "name": "ohos_id_color_accent_shadow",
+      "value": "#007DFF40"
+    },
+    {
+      "name": "ohos_id_color_accent_shadow_dark",
+      "value": "#007DFF60"
+    },
+    {
+      "name": "ohos_id_color_error",
+      "value": "#FF3B30"
     }
   ]
 }

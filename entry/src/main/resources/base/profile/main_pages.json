@@ -1,5 +1,11 @@
 {
   "src": [
-    "pages/Index"
+    "pages/Index",
+    "pages/login",
+    "pages/register",
+    "pages/main",
+    "pages/setting",
+    "pages/todo",
+    "pages/note"
   ]
 }
